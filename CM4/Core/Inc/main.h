@@ -58,6 +58,8 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define HSEM_USART3_UpdateHandler 2
+#define HSEM_USART3 1
 #define LD1_Pin GPIO_PIN_0
 #define LD1_GPIO_Port GPIOB
 #define STLINK_RX_Pin GPIO_PIN_8
