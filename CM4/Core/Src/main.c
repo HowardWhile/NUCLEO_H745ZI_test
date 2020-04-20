@@ -74,7 +74,7 @@ ETH_HandleTypeDef heth;
 UART_HandleTypeDef huart3;
 
 /* USER CODE BEGIN PV */
-
+UART_HandleTypeDef* huart3_buffer_in_CM4;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -89,14 +89,14 @@ void MX_USART3_UART_Init(void);
 /* USER CODE BEGIN 0 */
 int _write(int file, char *ptr, int len)
 {
-
+	HAL_UART_Transmit(&huart3, (uint8_t*)ptr, len, 500);
 	return len;
 }
 
 clock_t clock()
 {
 	return HAL_GetTick();
-    //return MCU.SystemClock;
+	//return MCU.SystemClock;
 }
 /* USER CODE END 0 */
 
@@ -141,6 +141,10 @@ int main(void)
 	/* Initialize all configured peripherals */
 	MX_GPIO_Init();
 	/* USER CODE BEGIN 2 */
+	while(HAL_HSEM_FastTake(HSEM_USART3_UpdateHandler) != HAL_OK) ;
+
+	huart3_buffer_in_CM4 = (UART_HandleTypeDef*) 0x24000000;
+	memcpy(&huart3, huart3_buffer_in_CM4, sizeof(UART_HandleTypeDef));
 
 	/* USER CODE END 2 */
 
@@ -152,11 +156,27 @@ int main(void)
 
 		/* USER CODE BEGIN 3 */
 		static int count = 0;
-		EXEC_INTERVAL(1000)
+		static int enable_print = 0;
+		EXEC_INTERVAL(100)
 		{
-			console("Hello World from CM4 %d", count++);
+			enable_print = 1;
 		}
 		EXEC_INTERVAL_END
+		if(enable_print)
+		{
+			static int err_count = 0;
+			if(HAL_HSEM_FastTake(HSEM_USART3) == HAL_OK)
+			{
+				enable_print = 0;
+				console("Hello World from CM4 %d err:%d", count++, err_count);
+				HAL_HSEM_Release(HSEM_USART3, 0);
+			}
+			else
+			{
+				err_count++;
+			}
+		}
+
 
 		EXEC_INTERVAL(100)
 		{

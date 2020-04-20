@@ -76,7 +76,7 @@ UART_HandleTypeDef huart3;
 PCD_HandleTypeDef hpcd_USB_OTG_FS;
 
 /* USER CODE BEGIN PV */
-
+UART_HandleTypeDef huart3_buffer_in_CM7 __attribute__((section(".ipcc")));
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -138,12 +138,13 @@ int main(void)
 	/* Configure the system clock */
 	SystemClock_Config();
 	/* USER CODE BEGIN Boot_Mode_Sequence_2 */
-	/* When system initialization is finished, Cortex-M7 will release Cortex-M4 by means of
-HSEM notification */
+	/* When system initialization is finished, Cortex-M7 will release Cortex-M4 by means of HSEM notification */
 	/*HW semaphore Clock enable*/
 	__HAL_RCC_HSEM_CLK_ENABLE();
 	/*Take HSEM */
 	HAL_HSEM_FastTake(HSEM_ID_0);
+	HAL_HSEM_FastTake(HSEM_USART3_UpdateHandler);
+
 	/*Release HSEM in order to notify the CPU2(CM4)*/
 	HAL_HSEM_Release(HSEM_ID_0,0);
 	/* wait until CPU2 wakes up from stop mode */
@@ -165,7 +166,8 @@ HSEM notification */
 	MX_USART3_UART_Init();
 	MX_USB_OTG_FS_PCD_Init();
 	/* USER CODE BEGIN 2 */
-
+	memcpy(&huart3_buffer_in_CM7, &huart3, sizeof(UART_HandleTypeDef));
+	HAL_HSEM_Release(HSEM_USART3_UpdateHandler, 0);
 	/* USER CODE END 2 */
 
 	/* Infinite loop */
@@ -177,11 +179,28 @@ HSEM notification */
 
 		/* USER CODE BEGIN 3 */
 		static int count = 0;
-		EXEC_INTERVAL(1000)
+		static int enable_print = 0;
+		EXEC_INTERVAL(100)
 		{
-			console("Hello World from CM7 %d", count++);
+			enable_print = 1;
 		}
 		EXEC_INTERVAL_END
+
+		if(enable_print)
+		{
+			static int err_count = 0;
+			if(HAL_HSEM_FastTake(HSEM_USART3) == HAL_OK)
+			{
+				enable_print = 0;
+				console("Hello World from CM7 %d err:%d", count++, err_count);
+				HAL_HSEM_Release(HSEM_USART3, 0);
+			}
+			else
+			{
+				err_count++;
+				HAL_Delay(1);
+			}
+		}
 
 		EXEC_INTERVAL(500)
 		{

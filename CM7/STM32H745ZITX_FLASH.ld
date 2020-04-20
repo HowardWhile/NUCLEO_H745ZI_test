@@ -44,9 +44,10 @@ _Min_Stack_Size = 0x400 ; /* required amount of stack */
 /* Specify the memory areas */
 MEMORY
 {
-FLASH (rx)      : ORIGIN = 0x08000000, LENGTH = 1024K
-RAM (xrw)      : ORIGIN = 0x20000000, LENGTH = 128K
-ITCMRAM (xrw)      : ORIGIN = 0x00000000, LENGTH = 64K
+FLASH (rx)		: ORIGIN = 0x08000000, LENGTH = 1024K
+RAM (xrw)		: ORIGIN = 0x20000000, LENGTH = 128K
+ITCMRAM (xrw)	: ORIGIN = 0x00000000, LENGTH = 64K
+AXIRAM (xrw)	: ORIGIN = 0x24000000, LENGTH = 128K
 }
 
 /* Define output sections */
@@ -157,7 +158,19 @@ SECTIONS
     . = ALIGN(8);
   } >RAM
 
-  
+    . = ALIGN(4);
+  .ipcc :
+  {
+    /* This is used by the startup in order to initialize the .ipcc secion */
+    _sipcc = .;         /* define a global symbol at ipcc start */
+    __ipcc_start__ = _sipcc;
+    *(.ipcc)
+    *(.ipcc*)
+
+    . = ALIGN(4);
+    _eipcc = .;         /* define a global symbol at ipcc end */
+    __ipcc_end__ = _eipcc;
+  } >AXIRAM
 
   /* Remove information from the standard libraries */
   /DISCARD/ :
