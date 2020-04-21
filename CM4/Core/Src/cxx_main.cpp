@@ -27,6 +27,7 @@ int _write(int file, char *ptr, int len)
 	{
 		buffer.Push(ptr[i]);
 	}
+
 	return len;
 }
 #ifdef __cplusplus
@@ -44,7 +45,7 @@ void cxx_main_loop(void)
 	static int err_count = 0;
 	EXEC_INTERVAL(100)
 	{
-		console("Hello from CM7 %d err:%d", count++, err_count);
+		console("Hello from CM4 %d err:%d", count++, err_count);
 	}
 	EXEC_INTERVAL_END
 
@@ -62,5 +63,7 @@ void cxx_main_loop(void)
 		{
 			err_count++;
 		}
+
 	}
+
 }
