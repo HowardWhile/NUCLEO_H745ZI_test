@@ -4,7 +4,7 @@
 
 Scores: 1948.051948
 
-## ![image-20200421144921264](pic/readme/image-20200421144921264.png)
+![image-20200421144921264](pic/readme/image-20200421144921264.png)
 
 ## Cotrex-M4
 
