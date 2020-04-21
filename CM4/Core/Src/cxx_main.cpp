@@ -27,12 +27,25 @@ int _write(int file, char *ptr, int len)
 	{
 		buffer.Push(ptr[i]);
 	}
-
 	return len;
 }
 #ifdef __cplusplus
 }
 #endif
+
+void uart3_tx_work_()
+{
+	if (buffer.GetAmount() > 0)
+	{
+		if (HAL_HSEM_FastTake(HSEM_USART3) == HAL_OK)
+		{
+			HAL_UART_Transmit(&huart3, (uint8_t*) (buffer.GetData()),
+					buffer.GetAmount(), 500);
+			buffer.Clear();
+			HAL_HSEM_Release(HSEM_USART3, 0);
+		}
+	}
+}
 
 void cxx_main_init(void)
 {
@@ -41,33 +54,6 @@ void cxx_main_init(void)
 
 void cxx_main_loop(void)
 {
-	static int count = 0;
-	static int err_count = 0;
-	EXEC_INTERVAL(100)
-	{
-		//console("Hello from CM4 %d err:%d", count++, err_count);
-	}
-	EXEC_INTERVAL_END
 	console_fps("Cortex-M4");
-
-	EXEC_INTERVAL(10)
-	{
-		if(buffer.GetAmount() > 0 )
-		{
-			if(HAL_HSEM_FastTake(HSEM_USART3) == HAL_OK)
-			{
-				HAL_UART_Transmit(&huart3, (uint8_t*)buffer.GetData(), buffer.GetAmount(), 500);
-
-				buffer.Clear();
-				HAL_HSEM_Release(HSEM_USART3, 0);
-
-			}
-			else
-			{
-				err_count++;
-			}
-		}
-	}
-	EXEC_INTERVAL_END
-
+	uart3_tx_work_();
 }

@@ -39,35 +39,22 @@ void cxx_main_init(void)
 
 }
 
-void cxx_main_loop(void)
+void uart3_tx_work_()
 {
-	static int count = 0;
-	static int err_count = 0;
-
-	EXEC_INTERVAL(100)
+	if (buffer.GetAmount() > 0)
 	{
-		//console("Hello from CM7 %d err:%f", count++, sqrt(count));
-	}
-	EXEC_INTERVAL_END
-	console_fps("Cortex-M7");
-
-	EXEC_INTERVAL(10)
-	{
-		if(buffer.GetAmount() > 0 )
+		if (HAL_HSEM_FastTake(HSEM_USART3) == HAL_OK)
 		{
-			if(HAL_HSEM_FastTake(HSEM_USART3) == HAL_OK)
-			{
-				HAL_UART_Transmit(&huart3, (uint8_t*)buffer.GetData(), buffer.GetAmount(), 500);
-
-				buffer.Clear();
-				HAL_HSEM_Release(HSEM_USART3, 0);
-
-			}
-			else
-			{
-				err_count++;
-			}
+			HAL_UART_Transmit(&huart3, (uint8_t*) (buffer.GetData()),
+					buffer.GetAmount(), 500);
+			buffer.Clear();
+			HAL_HSEM_Release(HSEM_USART3, 0);
 		}
 	}
-	EXEC_INTERVAL_END
+}
+
+void cxx_main_loop(void)
+{
+	console_fps("Cortex-M7");
+	uart3_tx_work_();
 }
