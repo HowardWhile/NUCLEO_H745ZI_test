@@ -44,7 +44,7 @@ void cxx_main_loop(void)
 	static int err_count = 0;
 	EXEC_INTERVAL(100)
 	{
-		console("Hello from CM7 %d err:%d", count++, err_count);
+		console("Hello from CM7 %d err:%f", count++, sqrt(count));
 	}
 	EXEC_INTERVAL_END
 
