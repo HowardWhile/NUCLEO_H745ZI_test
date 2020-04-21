@@ -25,6 +25,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "arc_console.hpp"
+#include "cxx_main.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -91,11 +92,11 @@ static void MX_USB_OTG_FS_PCD_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-int _write(int file, char *ptr, int len)
-{
-	HAL_UART_Transmit(&huart3, (uint8_t*)ptr, len, 500);
-	return len;
-}
+//int _write(int file, char *ptr, int len)
+//{
+//	HAL_UART_Transmit(&huart3, (uint8_t*)ptr, len, 500);
+//	return len;
+//}
 
 clock_t clock()
 {
@@ -172,35 +173,13 @@ int main(void)
 
 	/* Infinite loop */
 	/* USER CODE BEGIN WHILE */
-
+	cxx_main_init();
 	while (1)
 	{
 		/* USER CODE END WHILE */
 
 		/* USER CODE BEGIN 3 */
-		static int count = 0;
-		static int enable_print = 0;
-		EXEC_INTERVAL(100)
-		{
-			enable_print = 1;
-		}
-		EXEC_INTERVAL_END
-
-		if(enable_print)
-		{
-			static int err_count = 0;
-			if(HAL_HSEM_FastTake(HSEM_USART3) == HAL_OK)
-			{
-				enable_print = 0;
-				console("Hello World from CM7 %d err:%d", count++, err_count);
-				HAL_HSEM_Release(HSEM_USART3, 0);
-			}
-			else
-			{
-				err_count++;
-				HAL_Delay(1);
-			}
-		}
+		cxx_main_loop();
 
 		EXEC_INTERVAL(500)
 		{
