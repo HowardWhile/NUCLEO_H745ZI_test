@@ -74,7 +74,7 @@ typedef clock_t CORE_TICKS;
  #endif
 #endif
 #ifndef COMPILER_FLAGS 
- #define COMPILER_FLAGS "-o0" /* "Please put compiler flags here (e.g. -o3)" */
+ #define COMPILER_FLAGS "-o3" /* "Please put compiler flags here (e.g. -o3)" */
 #endif
 #ifndef MEM_LOCATION 
  #define MEM_LOCATION "STACK"
@@ -193,7 +193,7 @@ void portable_fini(core_portable *p);
 #endif
 #endif
 
-#define ITERATIONS 5000
+#define ITERATIONS 30000
 
 
 #endif /* CORE_PORTME_H */
