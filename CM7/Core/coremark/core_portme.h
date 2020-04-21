@@ -193,7 +193,7 @@ void portable_fini(core_portable *p);
 #endif
 #endif
 
-#define ITERATIONS 3000
+#define ITERATIONS 5000
 
 
 #endif /* CORE_PORTME_H */
