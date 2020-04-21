@@ -60,10 +60,6 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define HSEM_USART3_UpdateHandler 2
 #define HSEM_USART3 1
-#define B1_Pin GPIO_PIN_13
-#define B1_GPIO_Port GPIOC
-#define LD3_Pin GPIO_PIN_14
-#define LD3_GPIO_Port GPIOB
 #define STLINK_RX_Pin GPIO_PIN_8
 #define STLINK_RX_GPIO_Port GPIOD
 #define STLINK_TX_Pin GPIO_PIN_9
