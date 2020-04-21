@@ -36,12 +36,14 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
 #define HSEM_ID_0 (0U) /* HW semaphore 0*/
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
+#define DEBUG_PRINT(...) console_tag("Cortex-M7", __VA_ARGS__);
+//#define DEBUG_PRINT(...)
 
 /* USER CODE END PM */
 
@@ -180,17 +182,30 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-//		if( HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin) == GPIO_PIN_SET )
+
+//		if( HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13) == GPIO_PIN_SET )
 //		{
-//			console("\r\n coremark start...");
-//			HAL_GPIO_WritePin(LD3_GPIO_Port, LD3_Pin, GPIO_PIN_SET);
-//			coremark_main();
-//			HAL_GPIO_WritePin(LD3_GPIO_Port, LD3_Pin, GPIO_PIN_RESET);
-//			console("\r\n coremark finish...");
+////			console("\r\n coremark start...");
+////			HAL_GPIO_WritePin(LD3_GPIO_Port, LD3_Pin, GPIO_PIN_SET);
+////			coremark_main();
+////			HAL_GPIO_WritePin(LD3_GPIO_Port, LD3_Pin, GPIO_PIN_RESET);
+////			console("\r\n coremark finish...");
+//			EXEC_INTERVAL(500)
+//			{
+//				console_tag("CM7", "User Button Down!");
+//			}
+//			EXEC_INTERVAL_END
 //		}
 
-		//coremark_main();
+		EXEC_INTERVAL(5000)
+		{
+			HAL_HSEM_FastTake(HSEM_ID_0);
+			HAL_HSEM_Release(HSEM_ID_0,0);
+		}
+		EXEC_INTERVAL_END
+
 		cxx_main_loop();
+
 		EXEC_INTERVAL(500)
 		{
 			HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
@@ -438,7 +453,10 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-
+void HAL_HSEM_FreeCallback(uint32_t SemMask)
+{
+	DEBUG_PRINT("HAL_HSEM_FreeCallback %d", SemMask);
+}
 /* USER CODE END 4 */
 
 /**

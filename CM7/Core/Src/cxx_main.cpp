@@ -45,8 +45,7 @@ void uart3_tx_work_()
 	{
 		if (HAL_HSEM_FastTake(HSEM_USART3) == HAL_OK)
 		{
-			HAL_UART_Transmit(&huart3, (uint8_t*) (buffer.GetData()),
-					buffer.GetAmount(), 500);
+			HAL_UART_Transmit(&huart3, (uint8_t*) (buffer.GetData()), buffer.GetAmount(), 500);
 			buffer.Clear();
 			HAL_HSEM_Release(HSEM_USART3, 0);
 		}
