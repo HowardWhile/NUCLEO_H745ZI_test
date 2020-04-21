@@ -45,25 +45,29 @@ void cxx_main_loop(void)
 	static int err_count = 0;
 	EXEC_INTERVAL(100)
 	{
-		console("Hello from CM4 %d err:%d", count++, err_count);
+		//console("Hello from CM4 %d err:%d", count++, err_count);
 	}
 	EXEC_INTERVAL_END
+	console_fps("Cortex-M4");
 
-	if(buffer.GetAmount() > 0 )
+	EXEC_INTERVAL(10)
 	{
-		if(HAL_HSEM_FastTake(HSEM_USART3) == HAL_OK)
+		if(buffer.GetAmount() > 0 )
 		{
-			HAL_UART_Transmit(&huart3, (uint8_t*)buffer.GetData(), buffer.GetAmount(), 500);
+			if(HAL_HSEM_FastTake(HSEM_USART3) == HAL_OK)
+			{
+				HAL_UART_Transmit(&huart3, (uint8_t*)buffer.GetData(), buffer.GetAmount(), 500);
 
-			buffer.Clear();
-			HAL_HSEM_Release(HSEM_USART3, 0);
+				buffer.Clear();
+				HAL_HSEM_Release(HSEM_USART3, 0);
 
+			}
+			else
+			{
+				err_count++;
+			}
 		}
-		else
-		{
-			err_count++;
-		}
-
 	}
+	EXEC_INTERVAL_END
 
 }
