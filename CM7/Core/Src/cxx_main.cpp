@@ -107,12 +107,17 @@ void cxx_main_loop(void)
 		if(enable)
 		{
 			HAL_GPIO_WritePin(m7_out_GPIO_Port, m7_out_Pin, GPIO_PIN_SET);
+			HAL_HSEM_FastTake(HSEM_INFO);
 			info.regs[1].BIT._0 = 1;
+			HAL_HSEM_Release(HSEM_INFO, 0);
+
 		}
 		else
 		{
 			HAL_GPIO_WritePin(m7_out_GPIO_Port, m7_out_Pin, GPIO_PIN_RESET);
+			HAL_HSEM_FastTake(HSEM_INFO);
 			info.regs[1].BIT._0 = 0;
+			HAL_HSEM_Release(HSEM_INFO, 0);
 		}
 		enable = !enable;
 		//HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);

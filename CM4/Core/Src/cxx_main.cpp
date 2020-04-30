@@ -79,8 +79,8 @@ void cxx_main_loop(void)
 
 	EXEC_INTERVAL(100)
 	{
-		console_tag("CM4","reg[0] " WORD_TO_BINARY_PATTERN ,
-				WORD_TO_BINARY(info->regs[0].WORD));
+		//console_tag("CM4","reg[0] " WORD_TO_BINARY_PATTERN ,
+		//		WORD_TO_BINARY(info->regs[0].WORD));
 
 	}
 	EXEC_INTERVAL_END;

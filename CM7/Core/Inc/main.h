@@ -86,6 +86,7 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define HSEM_USART3_UpdateHandler 2
 #define HSEM_USART3 1
+#define HSEM_INFO 3
 #define B1_Pin GPIO_PIN_13
 #define B1_GPIO_Port GPIOC
 #define m7_out_Pin GPIO_PIN_11
