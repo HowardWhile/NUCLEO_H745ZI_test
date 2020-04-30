@@ -37,7 +37,33 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
+typedef struct {
+	uint8_t _0 :1;
+	uint8_t _1 :1;
+	uint8_t _2 :1;
+	uint8_t _3 :1;
+	uint8_t _4 :1;
+	uint8_t _5 :1;
+	uint8_t _6 :1;
+	uint8_t _7 :1;
+	uint8_t _8 :1;
+	uint8_t _9 :1;
+	uint8_t _10 :1;
+	uint8_t _11 :1;
+	uint8_t _12 :1;
+	uint8_t _13 :1;
+	uint8_t _14 :1;
+	uint8_t _15 :1;
+}ts_bit_16;
 
+typedef union{
+	ts_bit_16 BIT;
+	short WORD;
+}tu_WORD_BIT;
+
+typedef struct{
+	tu_WORD_BIT regs[10000];
+}ts_share_infomation;
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/
@@ -60,6 +86,8 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define HSEM_USART3_UpdateHandler 2
 #define HSEM_USART3 1
+#define B1_Pin GPIO_PIN_13
+#define B1_GPIO_Port GPIOC
 #define STLINK_RX_Pin GPIO_PIN_8
 #define STLINK_RX_GPIO_Port GPIOD
 #define STLINK_TX_Pin GPIO_PIN_9

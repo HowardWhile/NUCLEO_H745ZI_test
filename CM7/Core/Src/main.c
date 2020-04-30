@@ -81,6 +81,7 @@ PCD_HandleTypeDef hpcd_USB_OTG_FS;
 
 /* USER CODE BEGIN PV */
 UART_HandleTypeDef huart3_buffer_in_CM7 __attribute__((section(".ipcc")));
+ts_share_infomation info __attribute__((section(".ipcc")));
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -206,11 +207,11 @@ int main(void)
 
 		cxx_main_loop();
 
-		EXEC_INTERVAL(500)
-		{
-			HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
-		}
-		EXEC_INTERVAL_END
+		//EXEC_INTERVAL(500)
+		//{
+		//	HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
+		//}
+		//EXEC_INTERVAL_END
 
 	}
   /* USER CODE END 3 */
@@ -442,6 +443,12 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin : B1_Pin */
+  GPIO_InitStruct.Pin = B1_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(B1_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : LD2_Pin */
   GPIO_InitStruct.Pin = LD2_Pin;

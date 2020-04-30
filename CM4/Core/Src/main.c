@@ -78,6 +78,7 @@ UART_HandleTypeDef huart3;
 
 /* USER CODE BEGIN PV */
 UART_HandleTypeDef* huart3_buffer_in_CM4;
+ts_share_infomation* info;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -140,6 +141,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
 	while(HAL_HSEM_FastTake(HSEM_USART3_UpdateHandler) != HAL_OK) ;
 	huart3_buffer_in_CM4 = (UART_HandleTypeDef*) 0x24000000;
+	info = (ts_share_infomation*) 0x2400008C;
 	memcpy(&huart3, huart3_buffer_in_CM4, sizeof(UART_HandleTypeDef));
 
   /* USER CODE END 2 */
@@ -152,21 +154,21 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-		if( HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin) == GPIO_PIN_SET )
-		{
-//			console("\r\n coremark start...");
-//			HAL_GPIO_WritePin(LD3_GPIO_Port, LD3_Pin, GPIO_PIN_SET);
-//			coremark_main();
-//			HAL_GPIO_WritePin(LD3_GPIO_Port, LD3_Pin, GPIO_PIN_RESET);
-//			console("\r\n coremark finish...");
-			EXEC_INTERVAL(500)
-			{
-				DEBUG_PRINT("User Button Down!");
-				HAL_HSEM_ActivateNotification(__HAL_HSEM_SEMID_TO_MASK(HSEM_ID_0));
-				HAL_HSEM_ActivateNotification(__HAL_HSEM_SEMID_TO_MASK(HSEM_USART3));
-			}
-			EXEC_INTERVAL_END
-		}
+//		if( HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin) == GPIO_PIN_SET )
+//		{
+////			console("\r\n coremark start...");
+////			HAL_GPIO_WritePin(LD3_GPIO_Port, LD3_Pin, GPIO_PIN_SET);
+////			coremark_main();
+////			HAL_GPIO_WritePin(LD3_GPIO_Port, LD3_Pin, GPIO_PIN_RESET);
+////			console("\r\n coremark finish...");
+//			EXEC_INTERVAL(500)
+//			{
+//				DEBUG_PRINT("User Button Down!");
+//				HAL_HSEM_ActivateNotification(__HAL_HSEM_SEMID_TO_MASK(HSEM_ID_0));
+//				HAL_HSEM_ActivateNotification(__HAL_HSEM_SEMID_TO_MASK(HSEM_USART3));
+//			}
+//			EXEC_INTERVAL_END
+//		}
 		cxx_main_loop();
 
 		EXEC_INTERVAL(100)
@@ -282,17 +284,10 @@ static void MX_GPIO_Init(void)
   GPIO_InitTypeDef GPIO_InitStruct = {0};
 
   /* GPIO Ports Clock Enable */
-  __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, LD1_Pin|LD3_Pin, GPIO_PIN_RESET);
-
-  /*Configure GPIO pin : B1_Pin */
-  GPIO_InitStruct.Pin = B1_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(B1_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : LD1_Pin LD3_Pin */
   GPIO_InitStruct.Pin = LD1_Pin|LD3_Pin;
