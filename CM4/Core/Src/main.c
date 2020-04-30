@@ -141,9 +141,9 @@ int main(void)
   /* USER CODE BEGIN 2 */
 	while(HAL_HSEM_FastTake(HSEM_USART3_UpdateHandler) != HAL_OK) ;
 	huart3_buffer_in_CM4 = (UART_HandleTypeDef*) 0x24000000;
-	info = (ts_share_infomation*) 0x2400008C;
 	memcpy(&huart3, huart3_buffer_in_CM4, sizeof(UART_HandleTypeDef));
 
+	info = (ts_share_infomation*) 0x2400008C;
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -285,9 +285,13 @@ static void MX_GPIO_Init(void)
 
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOB_CLK_ENABLE();
+  __HAL_RCC_GPIOG_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, LD1_Pin|LD3_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(m4_out_GPIO_Port, m4_out_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pins : LD1_Pin LD3_Pin */
   GPIO_InitStruct.Pin = LD1_Pin|LD3_Pin;
@@ -295,6 +299,13 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : m4_out_Pin */
+  GPIO_InitStruct.Pin = m4_out_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(m4_out_GPIO_Port, &GPIO_InitStruct);
 
 }
 

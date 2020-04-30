@@ -87,11 +87,11 @@ void cxx_main_loop(void)
 
 	if(info->regs[1].BIT._0)
 	{
-		HAL_GPIO_WritePin(LD3_GPIO_Port, LD3_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(m4_out_GPIO_Port, m4_out_Pin, GPIO_PIN_SET);
 	}
 	else
 	{
-		HAL_GPIO_WritePin(LD3_GPIO_Port, LD3_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(m4_out_GPIO_Port, m4_out_Pin, GPIO_PIN_RESET);
 	}
 
 }

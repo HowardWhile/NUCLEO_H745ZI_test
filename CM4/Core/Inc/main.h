@@ -94,6 +94,8 @@ void Error_Handler(void);
 #define STLINK_RX_GPIO_Port GPIOD
 #define STLINK_TX_Pin GPIO_PIN_9
 #define STLINK_TX_GPIO_Port GPIOD
+#define m4_out_Pin GPIO_PIN_12
+#define m4_out_GPIO_Port GPIOG
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */

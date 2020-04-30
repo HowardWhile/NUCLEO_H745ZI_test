@@ -88,6 +88,8 @@ void Error_Handler(void);
 #define HSEM_USART3 1
 #define B1_Pin GPIO_PIN_13
 #define B1_GPIO_Port GPIOC
+#define m7_out_Pin GPIO_PIN_11
+#define m7_out_GPIO_Port GPIOB
 #define STLINK_RX_Pin GPIO_PIN_8
 #define STLINK_RX_GPIO_Port GPIOD
 #define STLINK_TX_Pin GPIO_PIN_9
