@@ -74,7 +74,7 @@ void uart3_tx_work_()
 
 void cxx_main_loop(void)
 {
-	console_fps("Cortex-M4");
+	//console_fps("Cortex-M4");
 	uart3_tx_work_();
 
 	EXEC_INTERVAL(100)

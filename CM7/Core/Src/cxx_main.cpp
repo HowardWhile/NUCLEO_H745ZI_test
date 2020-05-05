@@ -83,26 +83,30 @@ void uart3_tx_work_()
 
 void cxx_main_loop(void)
 {
-	console_fps("Cortex-M7");
+	//console_fps("Cortex-M7");
 	uart3_tx_work_();
 
 	if( HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin) == GPIO_PIN_SET )
 	{
 		//console_tag("CM7", "User Button Down!");
+		HAL_HSEM_FastTake(HSEM_INFO);
 		info.regs[0].WORD |= 0x1;
+		HAL_HSEM_Release(HSEM_INFO, 0);
 	}
 
 	EXEC_INTERVAL(1000)
 	{
 		//console_tag("CM7","reg[0] " WORD_TO_BINARY_PATTERN ,
 		//		WORD_TO_BINARY(info.regs[0].WORD));
-
+		HAL_HSEM_FastTake(HSEM_INFO);
 		info.regs[0].WORD <<= 1;
+		HAL_HSEM_Release(HSEM_INFO, 0);
 	}
 	EXEC_INTERVAL_END;
 
 	EXEC_INTERVAL(500)
 	{
+
 		static bool enable = false;
 		if(enable)
 		{
@@ -110,7 +114,6 @@ void cxx_main_loop(void)
 			HAL_HSEM_FastTake(HSEM_INFO);
 			info.regs[1].BIT._0 = 1;
 			HAL_HSEM_Release(HSEM_INFO, 0);
-
 		}
 		else
 		{
